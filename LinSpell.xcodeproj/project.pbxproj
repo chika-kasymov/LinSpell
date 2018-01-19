@@ -57,7 +57,8 @@
 			isa = PBXGroup;
 			children = (
 				C71C68092011E3A200F23952 /* AppDelegate.swift */,
-				C71C680B2011E3A200F23952 /* ViewController.swift */,
+				C71C681F2011E3BE00F23952 /* Controllers */,
+				C71C681E2011E3BE00F23952 /* Models */,
 				C71C680D2011E3A200F23952 /* Main.storyboard */,
 				C71C68132011E3A200F23952 /* Assets.xcassets */,
 				C71C68152011E3A200F23952 /* LaunchScreen.storyboard */,
@@ -65,6 +66,21 @@
 				C71C68102011E3A200F23952 /* LinSpell.xcdatamodeld */,
 			);
 			path = LinSpell;
+			sourceTree = "<group>";
+		};
+		C71C681E2011E3BE00F23952 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C71C681F2011E3BE00F23952 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C71C680B2011E3A200F23952 /* ViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,7 +231,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -266,7 +282,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -281,6 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D8J3KDU52Z;
 				INFOPLIST_FILE = LinSpell/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shyngys.LinSpell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -296,6 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D8J3KDU52Z;
 				INFOPLIST_FILE = LinSpell/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shyngys.LinSpell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
