@@ -54,11 +54,12 @@ public final class EditDistance {
         if string1.count > string2.count {
             let temp = string1; string1 = string2; string2 = temp; // swap string1 and string2
         }
-        var sLen = string1.count // this is also the minimun length of the two strings
-        var tLen = string2.count
 
-        let string1Chars = Array(string1)
-        let string2Chars = Array(string2)
+        let string1Chars = ArraySlice(string1.utf16)
+        var string2Chars = ArraySlice(string2.utf16)
+
+        var sLen = string1Chars.count // this is also the minimun length of the two strings
+        var tLen = string2Chars.count
 
         // suffix common to both strings can be ignored
         while sLen > 0 && string1Chars[sLen - 1] == string2Chars[tLen - 1] { sLen -= 1; tLen -= 1; }
@@ -76,9 +77,7 @@ public final class EditDistance {
                 return tLen
             }
 
-            let startIndex = string2.index(string2.startIndex, offsetBy: start)
-            let endIndex = string2.index(startIndex, offsetBy: tLen)
-            string2 = String(string2[startIndex..<endIndex])
+            string2Chars = string2Chars[start..<(start + tLen)]
         }
         let lenDiff = tLen - sLen
         if maxDistance < 0 || maxDistance > tLen {
@@ -108,7 +107,7 @@ public final class EditDistance {
         for i in 0..<sLen {
             let prevsChar = sChar
             sChar = string1Chars[start + i]
-            var tChar = string2Chars[0]
+            var tChar = string2Chars[start]
             var left = i
             current = left + 1
             var nextTransCost = 0
@@ -124,7 +123,7 @@ public final class EditDistance {
                 current = left // cost of diagonal (substitution)
                 left = v0[j]    // left now equals current cost (which will be diagonal at next iteration)
                 let prevtChar = tChar
-                tChar = string2Chars[j]
+                tChar = string2Chars[start + j]
                 if sChar != tChar {
                     if (left < current) { current = left }   // insertion
                     if (above < current) { current = above } // deletion

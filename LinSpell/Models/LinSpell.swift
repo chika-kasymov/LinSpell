@@ -49,11 +49,6 @@ public final class LinSpell {
         }
     }
 
-    private static func word(from key: String, language: String) -> String {
-        let dictWord = String(key.suffix(from: key.index(key.startIndex, offsetBy: language.count)))
-        return dictWord
-    }
-
     /// Сreate a non-unique wordlist from sample text
     /// language independent (e.g. works with Chinese characters)
     ///
@@ -79,12 +74,11 @@ public final class LinSpell {
     ///
     /// - Parameters:
     ///   - corpus: String path to dictionary file
-    ///   - language: String code of the language
     ///   - termIndex: Int index of column for words
     ///   - countIndex: Int index of column for words count
     /// - Returns: Bool indicating success or failure
     @discardableResult
-    public static func loadDictionary(corpus: String, language: String, termIndex: Int, countIndex: Int) -> Bool {
+    public static func loadDictionary(corpus: String, termIndex: Int, countIndex: Int) -> Bool {
         if !FileManager.default.fileExists(atPath: corpus) {
             return false
         }
@@ -95,7 +89,7 @@ public final class LinSpell {
                 if lineParts.count >= 2 {
                     let key = lineParts[termIndex]
                     if let count = Int64(lineParts[countIndex]) {
-                        dictionaryLinear[language + key] = min(Int64.max, count)
+                        dictionaryLinear[key] = min(Int64.max, count)
                     }
                 }
             }
@@ -108,10 +102,9 @@ public final class LinSpell {
     ///
     /// - Parameters:
     ///   - corpus: String path to dictionary file
-    ///   - language: String code of the language
     /// - Returns: Bool indicating success or failure
     @discardableResult
-    public static func createDictionary(corpus: String, language: String) -> Bool {
+    public static func createDictionary(corpus: String) -> Bool {
         if !FileManager.default.fileExists(atPath: corpus) {
             return false
         }
@@ -119,8 +112,7 @@ public final class LinSpell {
         if let url = URL(string: corpus), let sr = StreamReader(url: url) {
             while let line = sr.nextLine() {
                 for key in parseWords(text: line) {
-                    let langPlusKey = language + key
-                    dictionaryLinear[langPlusKey] = (dictionaryLinear[langPlusKey] ?? 0) + 1
+                    dictionaryLinear[key] = (dictionaryLinear[key] ?? 0) + 1
                 }
             }
         }
@@ -132,16 +124,15 @@ public final class LinSpell {
     ///
     /// - Parameters:
     ///   - input: String input value
-    ///   - language: String code of the language
     ///   - editDistanceMax: Int to set maximum edit distance
     /// - Returns: Array of suggestions
-    public static func lookupLinear(input: String, language: String, editDistanceMax: Int = editDistanceMax) -> [SuggestItem] {
+    public static func lookupLinear(input: String, editDistanceMax: Int = editDistanceMax) -> [SuggestItem] {
         var suggestions = [SuggestItem]()
 
         var editDistanceMax2 = editDistanceMax
 
         // probably most lookups will be matches, lets get them straight O(1) from a hash table
-        if verbose != .all, let value = dictionaryLinear[language + input] {
+        if verbose != .all, let value = dictionaryLinear[input] {
             var si = SuggestItem()
             si.term = input
             si.count = value
@@ -151,11 +142,11 @@ public final class LinSpell {
             return suggestions
         }
 
-        for (key, value) in dictionaryLinear {
-            let dictWord = word(from: key, language: language)
+//        var timeToCalculateDLDistance: Double = 0
 
+        for (key, value) in dictionaryLinear {
             // skip if strings length difference is bigger than editDistanceMax2
-            if abs(dictWord.count - input.count) > editDistanceMax2 {
+            if abs(key.count - input.count) > editDistanceMax2 {
                 continue
             }
 
@@ -164,7 +155,12 @@ public final class LinSpell {
                 continue
             }
 
-            let distance = EditDistance.damerauLevenshteinDistance(string1: input, string2: dictWord, maxDistance: editDistanceMax2)
+//            let start = DispatchTime.now()
+            let distance = EditDistance.damerauLevenshteinDistance(string1: input, string2: key, maxDistance: editDistanceMax2)
+//            let end = DispatchTime.now()
+//            let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+//            timeToCalculateDLDistance += Double(nanoTime) / 1_000_000
+
             // Calculate if only the Levenshtein distance is smaller than or equal to editDistanceMax
             if distance >= 0 && distance <= editDistanceMax {
                 // v0: clear if better ed or better ed + count;
@@ -187,19 +183,18 @@ public final class LinSpell {
                 }
 
                 var si = SuggestItem()
-                si.term = dictWord
+                si.term = key
                 si.count = value
                 si.distance = distance
                 suggestions.append(si)
             }
         }
 
+//        print("Time to generate word from key: \(timeToConvertKeyToWord) ms")
+//        print("Time to calculate DL distance: \(timeToCalculateDLDistance) ms")
+
         // sort by ascending edit distance, then by descending word frequency
         if verbose != .all {
-//            suggestions.sort(by: { (x, y) in
-//                return x.count > y.count
-//            })
-//        } else {
             suggestions.sort(by: { (x, y) in
                 if x.distance != y.distance {
                     return x.distance < y.distance

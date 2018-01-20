@@ -12,8 +12,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var resultLabel: UILabel?
 
-    var mainItem: DispatchWorkItem?
-    var backgroundItem: DispatchWorkItem?
+    var backgroundQueue = OperationQueue()
 
     var resultsText = ""
 
@@ -35,7 +34,7 @@ class ViewController: UIViewController {
         // let path = Bundle.main.path(forResource: "frequency_dictionary_en_500_000", ofType: "txt") // for benchmark only (contains also non-genuine English words)
         let path = Bundle.main.path(forResource: "frequency_dictionary_en_82_765", ofType: "txt") // for spelling correction (genuine English words)
         if path != nil {
-            if !LinSpell.loadDictionary(corpus: path!, language: "en", termIndex: 0, countIndex: 1) {
+            if !LinSpell.loadDictionary(corpus: path!, termIndex: 0, countIndex: 1) {
                 print("File not found: " + path!)
             }
         }
@@ -85,16 +84,16 @@ class ViewController: UIViewController {
             return
         }
 
-        mainItem?.cancel()
-        backgroundItem?.cancel()
+        backgroundQueue.cancelAllOperations()
 
-        mainItem = DispatchWorkItem { [weak self] in
-            self?.resultLabel?.text = self?.resultsText
-        }
-        backgroundItem = DispatchWorkItem { [weak self] in
+        backgroundQueue.addOperation { [weak self] in
+//            print("***** LOOKUP START *****")
+
             let start = DispatchTime.now()
-            let results = LinSpell.lookupLinear(input: text, language: "en")
+            let results = LinSpell.lookupLinear(input: text)
             let end = DispatchTime.now()
+
+//            print("***** LOOKUP END *****")
 
             let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
             let timeInterval = Double(nanoTime) / 1_000_000
@@ -107,17 +106,9 @@ class ViewController: UIViewController {
             }
             self?.resultsText += "\n\nLookup time: \(timeInterval) ms"
 
-            DispatchQueue.main.async { [weak self] in
+            OperationQueue.main.addOperation {
                 self?.resultLabel?.text = self?.resultsText
             }
-
-            if let mainItem = self?.mainItem {
-                DispatchQueue.main.async(execute: mainItem)
-            }
-        }
-
-        if let backgroundItem = backgroundItem {
-            DispatchQueue.global().async(execute: backgroundItem)
         }
     }
 
