@@ -14,6 +14,11 @@
 		C71C68142011E3A200F23952 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71C68132011E3A200F23952 /* Assets.xcassets */; };
 		C71C68172011E3A200F23952 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71C68152011E3A200F23952 /* LaunchScreen.storyboard */; };
 		C71C68212011E48800F23952 /* DamerauLevenshtein.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71C68202011E48800F23952 /* DamerauLevenshtein.swift */; };
+		C71C68402011F4EB00F23952 /* LinSpell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71C683F2011F4EB00F23952 /* LinSpell.swift */; };
+		C73C17822011FDEF000442EA /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73C17812011FDEF000442EA /* StreamReader.swift */; };
+		C73C178B201212B1000442EA /* frequency_dictionary_en_82_765.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73C178A201212B1000442EA /* frequency_dictionary_en_82_765.txt */; };
+		C73C178E20121737000442EA /* frequency_dictionary_en_30_000.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73C178C20121736000442EA /* frequency_dictionary_en_30_000.txt */; };
+		C73C178F20121737000442EA /* frequency_dictionary_en_500_000.txt in Resources */ = {isa = PBXBuildFile; fileRef = C73C178D20121737000442EA /* frequency_dictionary_en_500_000.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,11 @@
 		C71C68162011E3A200F23952 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71C68182011E3A200F23952 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C71C68202011E48800F23952 /* DamerauLevenshtein.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamerauLevenshtein.swift; sourceTree = "<group>"; };
+		C71C683F2011F4EB00F23952 /* LinSpell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinSpell.swift; sourceTree = "<group>"; };
+		C73C17812011FDEF000442EA /* StreamReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
+		C73C178A201212B1000442EA /* frequency_dictionary_en_82_765.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frequency_dictionary_en_82_765.txt; sourceTree = "<group>"; };
+		C73C178C20121736000442EA /* frequency_dictionary_en_30_000.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frequency_dictionary_en_30_000.txt; sourceTree = "<group>"; };
+		C73C178D20121737000442EA /* frequency_dictionary_en_500_000.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frequency_dictionary_en_500_000.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +71,7 @@
 				C71C68092011E3A200F23952 /* AppDelegate.swift */,
 				C71C681F2011E3BE00F23952 /* Controllers */,
 				C71C681E2011E3BE00F23952 /* Models */,
+				C73C178320121250000442EA /* Resources */,
 				C71C680D2011E3A200F23952 /* Main.storyboard */,
 				C71C68132011E3A200F23952 /* Assets.xcassets */,
 				C71C68152011E3A200F23952 /* LaunchScreen.storyboard */,
@@ -74,6 +85,8 @@
 			isa = PBXGroup;
 			children = (
 				C71C68202011E48800F23952 /* DamerauLevenshtein.swift */,
+				C71C683F2011F4EB00F23952 /* LinSpell.swift */,
+				C73C17812011FDEF000442EA /* StreamReader.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -84,6 +97,16 @@
 				C71C680B2011E3A200F23952 /* ViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		C73C178320121250000442EA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C73C178C20121736000442EA /* frequency_dictionary_en_30_000.txt */,
+				C73C178A201212B1000442EA /* frequency_dictionary_en_82_765.txt */,
+				C73C178D20121737000442EA /* frequency_dictionary_en_500_000.txt */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,8 +169,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C71C68172011E3A200F23952 /* LaunchScreen.storyboard in Resources */,
+				C73C178B201212B1000442EA /* frequency_dictionary_en_82_765.txt in Resources */,
 				C71C68142011E3A200F23952 /* Assets.xcassets in Resources */,
+				C73C178E20121737000442EA /* frequency_dictionary_en_30_000.txt in Resources */,
 				C71C680F2011E3A200F23952 /* Main.storyboard in Resources */,
+				C73C178F20121737000442EA /* frequency_dictionary_en_500_000.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +184,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73C17822011FDEF000442EA /* StreamReader.swift in Sources */,
 				C71C680C2011E3A200F23952 /* ViewController.swift in Sources */,
+				C71C68402011F4EB00F23952 /* LinSpell.swift in Sources */,
 				C71C680A2011E3A200F23952 /* AppDelegate.swift in Sources */,
 				C71C68122011E3A200F23952 /* LinSpell.xcdatamodeld in Sources */,
 				C71C68212011E48800F23952 /* DamerauLevenshtein.swift in Sources */,

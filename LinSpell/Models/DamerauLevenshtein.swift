@@ -38,7 +38,7 @@ public final class EditDistance {
     ///   - maxDistance: The maximum edit distance of interest.
     /// - Returns: Int edit distance, >= 0 representing the number of edits required
     /// to transform one string to the other, or -1 if the distance is greater than the specified maxDistance.
-    public static func damerauLevenshteinDistance(_ string1: String?, _ string2: String?, _ maxDistance: Int) -> Int {
+    public static func damerauLevenshteinDistance(string1: String?, string2: String?, maxDistance: Int) -> Int {
         var string1 = string1 ?? ""
         var string2 = string2 ?? ""
         var maxDistance = maxDistance
@@ -61,7 +61,7 @@ public final class EditDistance {
         let string2Chars = Array(string2)
 
         // suffix common to both strings can be ignored
-        while sLen > 0 && (string1Chars[sLen - 1] == string2Chars[tLen - 1]) { sLen -= 1; tLen -= 1; }
+        while sLen > 0 && string1Chars[sLen - 1] == string2Chars[tLen - 1] { sLen -= 1; tLen -= 1; }
 
         var start = 0
         if string1Chars[0] == string2Chars[0] || sLen == 0 { // if there'string1 a shared prefix, or all string1 matches string2'string1 suffix
@@ -72,16 +72,20 @@ public final class EditDistance {
 
             // if all of shorter string matches prefix and/or suffix of longer string, then
             // edit distance is just the delete of additional characters present in longer string
-            if (sLen == 0) { return tLen }
+            if (sLen == 0) {
+                return tLen
+            }
 
             let startIndex = string2.index(string2.startIndex, offsetBy: start)
             let endIndex = string2.index(startIndex, offsetBy: tLen)
-            string2 = String(string2[startIndex...endIndex])
+            string2 = String(string2[startIndex..<endIndex])
         }
         let lenDiff = tLen - sLen
         if maxDistance < 0 || maxDistance > tLen {
             maxDistance = tLen
-        } else if (lenDiff > maxDistance) { return -1 }
+        } else if (lenDiff > maxDistance) {
+            return -1
+        }
 
         var v0 = [Int](repeating: 0, count: tLen)
         var v2 = [Int](repeating: 0, count: tLen) // stores one level further back (offset by +1 position)
@@ -134,7 +138,9 @@ public final class EditDistance {
                 }
                 v0[j] = current
             }
-            if haveMax && v0[i + lenDiff] > maxDistance  { return -1 }
+            if haveMax && v0[i + lenDiff] > maxDistance {
+                return -1
+            }
         }
         return current <= maxDistance ? current : -1
     }
