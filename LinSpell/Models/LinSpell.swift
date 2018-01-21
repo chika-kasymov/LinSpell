@@ -126,8 +126,8 @@ public final class LinSpell {
     ///   - input: String input value
     ///   - editDistanceMax: Int to set maximum edit distance
     /// - Returns: Array of suggestions
-    public static func lookupLinear(input: String, editDistanceMax: Int = editDistanceMax) -> [SuggestItem] {
-        var suggestions = [SuggestItem]()
+    public static func lookupLinear(input: String, editDistanceMax: Int = editDistanceMax) -> ArraySlice<SuggestItem> {
+        var suggestions = ArraySlice<SuggestItem>()
 
         var editDistanceMax2 = editDistanceMax
 
@@ -144,9 +144,11 @@ public final class LinSpell {
 
 //        var timeToCalculateDLDistance: Double = 0
 
+//        let start = DispatchTime.now()
+
         for (key, value) in dictionaryLinear {
             // skip if strings length difference is bigger than editDistanceMax2
-            if abs(key.count - input.count) > editDistanceMax2 {
+            if abs(key.endIndex.encodedOffset - input.endIndex.encodedOffset) > editDistanceMax2 {
                 continue
             }
 
@@ -190,8 +192,13 @@ public final class LinSpell {
             }
         }
 
-//        print("Time to generate word from key: \(timeToConvertKeyToWord) ms")
 //        print("Time to calculate DL distance: \(timeToCalculateDLDistance) ms")
+
+//        let end = DispatchTime.now()
+//        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+//        let fullTimeToIterateDictionary = Double(nanoTime) / 1_000_000
+//
+//        print("Time to iterate dictionary: \(fullTimeToIterateDictionary) ms")
 
         // sort by ascending edit distance, then by descending word frequency
         if verbose != .all {
@@ -205,7 +212,7 @@ public final class LinSpell {
 
         if verbose == .top && suggestions.count > 1 {
             let length = min(topResultsLimit, suggestions.count)
-            return Array(suggestions.prefix(upTo: length))
+            return suggestions.prefix(upTo: length)
         }
 
         return suggestions

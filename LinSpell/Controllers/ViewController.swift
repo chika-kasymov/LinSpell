@@ -98,9 +98,8 @@ class ViewController: UIViewController {
             let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
             let timeInterval = Double(nanoTime) / 1_000_000
 
-            let limit = min(LinSpell.topResultsLimit, results.count)
             self?.resultsText = ""
-            self?.resultsText = Array(results.prefix(upTo: limit)).map{ $0.term }.joined(separator: "\n")
+            self?.resultsText = results.map{ $0.term }.joined(separator: "\n")
             if results.count == 0 {
                 self?.resultsText = "No results :("
             }
