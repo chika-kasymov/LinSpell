@@ -35,6 +35,9 @@ public final class LinSpell {
 
     public static var dictionaryLinear = [String: Int64]()
 
+    private static let regexPattern = "\\p{L}[\\p{L}']*(?:-\\p{L}+)*" // word in any language (includes `-` if needed, ex: tick-tick)
+    private static var regex: NSRegularExpression?
+
     public struct SuggestItem: Hashable {
         public var term = ""
         public var distance = 0
@@ -56,11 +59,11 @@ public final class LinSpell {
     ///   - text: String to parse words
     /// - Returns: String array of parsed words
     private static func parseWords(text: String) -> [String] {
-        let regex = "\\p{L}[\\p{L}']*(?:-\\p{L}+)*" // word in any language (includes `-` if needed, ex: tick-tick)
         do {
-            let regex = try NSRegularExpression(pattern: regex)
-            let results = regex.matches(in: text,
-                                        range: NSRange(text.startIndex..., in: text))
+            if regex == nil {
+                regex = try NSRegularExpression(pattern: regexPattern)
+            }
+            let results = regex?.matches(in: text, range: NSRange(text.startIndex..., in: text)) ?? []
             return results.map {
                 String(text[Range($0.range, in: text)!])
             }
@@ -99,9 +102,6 @@ public final class LinSpell {
     }
 
     /// Create a frequency dictionary from a corpus
-    ///
-    /// - note: Use this method only to generate frequency dictionary on your machine not iOS device.
-    ///         For example, create a command line project, run this method and export results to .txt file.
     ///
     /// - Parameters:
     ///   - corpus: String path to dictionary file
