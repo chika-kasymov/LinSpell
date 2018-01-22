@@ -100,6 +100,9 @@ public final class LinSpell {
 
     /// Create a frequency dictionary from a corpus
     ///
+    /// - note: Use this method only to generate frequency dictionary on your machine not iOS device.
+    ///         For example, create a command line project, run this method and export results to .txt file.
+    ///
     /// - Parameters:
     ///   - corpus: String path to dictionary file
     /// - Returns: Bool indicating success or failure
@@ -142,10 +145,6 @@ public final class LinSpell {
             return suggestions
         }
 
-//        var timeToCalculateDLDistance: Double = 0
-
-//        let start = DispatchTime.now()
-
         for (key, value) in dictionaryLinear {
             // skip if strings length difference is bigger than editDistanceMax2
             if abs(key.endIndex.encodedOffset - input.endIndex.encodedOffset) > editDistanceMax2 {
@@ -157,11 +156,7 @@ public final class LinSpell {
                 continue
             }
 
-//            let start = DispatchTime.now()
             let distance = EditDistance.damerauLevenshteinDistance(string1: input, string2: key, maxDistance: editDistanceMax2)
-//            let end = DispatchTime.now()
-//            let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-//            timeToCalculateDLDistance += Double(nanoTime) / 1_000_000
 
             // Calculate if only the Levenshtein distance is smaller than or equal to editDistanceMax
             if distance >= 0 && distance <= editDistanceMax {
@@ -191,14 +186,6 @@ public final class LinSpell {
                 suggestions.append(si)
             }
         }
-
-//        print("Time to calculate DL distance: \(timeToCalculateDLDistance) ms")
-
-//        let end = DispatchTime.now()
-//        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-//        let fullTimeToIterateDictionary = Double(nanoTime) / 1_000_000
-//
-//        print("Time to iterate dictionary: \(fullTimeToIterateDictionary) ms")
 
         // sort by ascending edit distance, then by descending word frequency
         if verbose != .all {

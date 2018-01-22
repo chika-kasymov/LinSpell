@@ -43,12 +43,12 @@ class ViewController: UIViewController {
         // Make sure the corpus does not contain spelling errors, invalid terms and the word frequency is representative to increase the precision of the spelling correction.
         // The dictionary may contain vocabulary from different languages.
         // If you use mixed vocabulary use the language parameter in lookupLinear() and createDictionary() accordingly.
-        // let path = Bundle.main.path(forResource: "big", ofType: "txt")
-        // if path != nil {
-        //     if !LinSpell.createDictionary(corpus: path!, language: "en") {
-        //         print("File not found: " + path!)
-        //     }
-        // }
+//         let path = Bundle.main.path(forResource: "big", ofType: "txt")
+//         if path != nil {
+//             if !LinSpell.createDictionary(corpus: path!) {
+//                 print("File not found: " + path!)
+//             }
+//         }
 
         let end = DispatchTime.now()
 
@@ -87,13 +87,9 @@ class ViewController: UIViewController {
         backgroundQueue.cancelAllOperations()
 
         backgroundQueue.addOperation { [weak self] in
-//            print("***** LOOKUP START *****")
-
             let start = DispatchTime.now()
             let results = LinSpell.lookupLinear(input: text)
             let end = DispatchTime.now()
-
-//            print("***** LOOKUP END *****")
 
             let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
             let timeInterval = Double(nanoTime) / 1_000_000

@@ -44,14 +44,14 @@ public final class EditDistance {
         var maxDistance = maxDistance
 
         if string1.isEmpty {
-            return string2.count
+            return string2.endIndex.encodedOffset
         } else if string2.isEmpty {
-            return string1.count
+            return string1.endIndex.encodedOffset
         }
 
         // if strings of different lengths, ensure shorter string is in string1. This can result in a little
         // faster speed by spending more time spinning just the inner loop during the main processing.
-        if string1.count > string2.count {
+        if string1.endIndex.encodedOffset > string2.endIndex.encodedOffset {
             let temp = string1; string1 = string2; string2 = temp; // swap string1 and string2
         }
 
