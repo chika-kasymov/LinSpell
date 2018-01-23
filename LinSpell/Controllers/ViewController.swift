@@ -14,13 +14,14 @@ class ViewController: UIViewController {
 
     var backgroundQueue = OperationQueue()
 
+    let linSpellObjC = LinSpellObjC()
     var resultsText = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        LinSpell.verbose = .top
-        LinSpell.editDistanceMax = 2
+//        LinSpell.verbose = .top
+//        LinSpell.editDistanceMax = 2
 
         print("Creating dictionary ...")
 
@@ -34,7 +35,10 @@ class ViewController: UIViewController {
         // let path = Bundle.main.path(forResource: "frequency_dictionary_en_500_000", ofType: "txt") // for benchmark only (contains also non-genuine English words)
         let path = Bundle.main.path(forResource: "frequency_dictionary_en_82_765", ofType: "txt") // for spelling correction (genuine English words)
         if path != nil {
-            if !LinSpell.loadDictionary(corpus: path!, termIndex: 0, countIndex: 1) {
+//            if !LinSpell.loadDictionary(corpus: path!, termIndex: 0, countIndex: 1) {
+//                print("File not found: " + path!)
+//            }
+            if !linSpellObjC.loadDictionary(path!, termIndex: 0, count: 1) {
                 print("File not found: " + path!)
             }
         }
@@ -55,7 +59,8 @@ class ViewController: UIViewController {
         let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
         let timeInterval = Double(nanoTime) / 1_000_000
 
-        print("Dictionary: \(LinSpell.dictionaryLinear.count) words, edit distance = \(LinSpell.editDistanceMax) in \(timeInterval) ms \(currentMemoryUsageInMB()) MB")
+//        print("Dictionary: \(LinSpell.dictionaryLinear.count) words, edit distance = \(LinSpell.editDistanceMax) in \(timeInterval) ms \(currentMemoryUsageInMB()) MB")
+        print("Dictionary: \(linSpellObjC.dictionaryLinear.count) words, edit distance = \(linSpellObjC.editDistanceMax) in \(timeInterval) ms \(currentMemoryUsageInMB()) MB")
     }
 
     private func currentMemoryUsageInMB() -> UInt64 {
@@ -88,7 +93,8 @@ class ViewController: UIViewController {
 
         backgroundQueue.addOperation { [weak self] in
             let start = DispatchTime.now()
-            let results = LinSpell.lookupLinear(input: text)
+//            let results = LinSpell.lookupLinear(input: text)
+            let results = self?.linSpellObjC.lookupLinear(text, editDistanceMax: 2) ?? []
             let end = DispatchTime.now()
 
             let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
