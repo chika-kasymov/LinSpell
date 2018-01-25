@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         // SCOWL — Spell Checker Oriented Word Lists which ensures genuine English vocabulary (but contained no word frequencies)
         // let path = Bundle.main.path(forResource: "frequency_dictionary_en_30_000", ofType: "txt") // for benchmark only (contains also non-genuine English words)
         // let path = Bundle.main.path(forResource: "frequency_dictionary_en_500_000", ofType: "txt") // for benchmark only (contains also non-genuine English words)
-        let path = Bundle.main.path(forResource: "kk_word_frequency", ofType: "txt") // for spelling correction (genuine English words)
+        let path = Bundle.main.path(forResource: "frequency_dictionary_en_82_765", ofType: "txt") // for spelling correction (genuine English words)
         if path != nil {
             if !LinSpell.loadDictionary(corpus: path!, termIndex: 0, countIndex: 1) {
                 print("File not found: " + path!)
